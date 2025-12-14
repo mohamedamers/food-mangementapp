@@ -18,13 +18,14 @@ function Login() {
         "https://upskilling-egypt.com:3006/api/v1/Users/Login",
         data
       );
-      console.log(response);
+      localStorage.setItem('token',response.data.token);
       toast.success("Logged in successfully", {
         position: "top-right",
         autoClose: 3000,
         theme: "colored",
       });
       navigate("/dashboard");
+      
     } catch (error) {
       toast.error(error.response.data.message, {
         position: "bottom-center",
@@ -84,7 +85,8 @@ function Login() {
                       {...register("password", {
                         required: "password is required",
                         pattern: {
-                          value:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+                          value:
+                            /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
                           message: "password is not valid",
                         },
                       })}

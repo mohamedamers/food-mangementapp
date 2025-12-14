@@ -1,4 +1,4 @@
-import { useState } from 'react'
+// import { useState } from 'react'
 // import reactLogo from './assets/react.svg'
 // import viteLogo from '/vite.svg'
 import './App.css'
@@ -40,7 +40,7 @@ function App() {
       errorElement:<NotFound/>,
       children:[
         {index:true,element:<DashbourdModule/>},
-        {path:'recipes',element:<RecipesList/>},
+        {path:'recipes',element:<RecipesList />},
         {path:'recipe-data',element:<RecipesData/>},
         {path:'categories',element:<CategoriesList/>},
         {path:'category-data',element:<CategoryData/>},

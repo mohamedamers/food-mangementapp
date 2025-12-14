@@ -1,7 +1,9 @@
 import React from 'react'
-
+import nodataimg from "../../../assets/images/nodata.png"
 export default function NoData() {
   return (
-    <div>NoData</div>
+    <>
+      <img src={nodataimg} alt="" />
+    </>
   )
 }

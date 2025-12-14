@@ -1,10 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 import logo from "../../../assets/images/logo.png";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { toast } from "react-toastify";
+
 export default function ForgetPass() {
+  const [showPass, setShowPass] = useState(false);
+  const [showConfirmPass, setShowConfirmPass] = useState(false);
+
+  const toggleShowPass = () => setShowPass(!showPass);
+  const toggleShowConfirmPass = () => setShowConfirmPass(!showConfirmPass);
+  
   let {
     register,
     formState: { errors },
@@ -94,7 +101,7 @@ export default function ForgetPass() {
                   </div>
                   {errors.password && (
                     <div className="alert alert-danger p-2">
-                      {errors.password.message}
+                      {errors.text.message}
                     </div>
                   )}
 
@@ -103,7 +110,7 @@ export default function ForgetPass() {
                       <i class="fa fa-lock" aria-hidden="true"></i>
                     </span>
                     <input
-                      type="password"
+                      type={showPass ? "text" : "password"}
                       {...register("password", {
                         required: "password is required",
                         pattern: {
@@ -117,6 +124,9 @@ export default function ForgetPass() {
                       aria-label="password"
                       aria-describedby="basic-addon1"
                     />
+                    <span className="input-group-text" onClick={toggleShowPass}>
+                      <i className={`fa ${showPass ? 'fa-eye-slash' : 'fa-eye'}`} aria-hidden="true"></i>
+                    </span>
                   </div>
                   {errors.password && (
                     <div className="alert alert-danger p-2">
@@ -129,7 +139,7 @@ export default function ForgetPass() {
                       <i class="fa fa-lock" aria-hidden="true"></i>
                     </span>
                     <input
-                      type="password"
+                      type={showConfirmPass ? "text" : "password"}
                       {...register("password", {
                         required: "password is required",
                         pattern: {
@@ -143,6 +153,9 @@ export default function ForgetPass() {
                       aria-label="password"
                       aria-describedby="basic-addon1"
                     />
+                    <span className="input-group-text" onClick={toggleShowConfirmPass}>
+                      <i className={`fa ${showConfirmPass ? 'fa-eye-slash' : 'fa-eye'}`} aria-hidden="true"></i>
+                    </span>
                   </div>
                   {errors.password && (
                     <div className="alert alert-danger p-2">
