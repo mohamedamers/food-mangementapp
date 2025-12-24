@@ -1,14 +1,16 @@
-import React from "react";
-import Header from "../../../shared/components/Header/Header";
-import headerImg from "../../../assets/images/header.png";
+import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import headerImg from "../../../assets/images/header.png";
+import { AuthContext } from "../../../context/AuthContext";
+import Header from "../../../shared/components/Header/Header";
 
 export default function DashbourdModule() {
+  let { loginData } = useContext(AuthContext);
   let navigate = useNavigate();
   return (
     <>
       <Header
-        title={"Welcome Upskilling !"}
+        title={`Welcome ${loginData?.userName}`}
         description={
           "This is a welcoming screen for the entry of the application , you can now see the options"
         }

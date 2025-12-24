@@ -1,10 +1,13 @@
-import React from "react";
-import logo from "../../../assets/images/logo.png";
-import { Link, useNavigate } from "react-router-dom";
-import { useForm } from "react-hook-form";
 import axios from "axios";
+import { useContext, useState } from "react";
+import { useForm } from "react-hook-form";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import logo from "../../../assets/images/logo.png";
+import { AuthContext } from "../../../context/AuthContext";
 function Login() {
+  let {saveLoginData} = useContext(AuthContext);
+  const [showPassword, setShowPassword] = useState(false);
   let {
     register,
     formState: { errors },
@@ -18,14 +21,14 @@ function Login() {
         "https://upskilling-egypt.com:3006/api/v1/Users/Login",
         data
       );
-      localStorage.setItem('token',response.data.token);
+      localStorage.setItem("token", response.data.token);
+      saveLoginData();
       toast.success("Logged in successfully", {
         position: "top-right",
         autoClose: 3000,
         theme: "colored",
       });
       navigate("/dashboard");
-      
     } catch (error) {
       toast.error(error.response.data.message, {
         position: "bottom-center",
@@ -52,9 +55,9 @@ function Login() {
                   </p>
                 </div>
                 <form onSubmit={handleSubmit(onSubmit)}>
-                  <div class="input-group mb-3">
-                    <span class="input-group-text" id="basic-addon1">
-                      <i class="fa fa-envelope" aria-hidden="true"></i>
+                  <div className="input-group mb-3">
+                    <span className="input-group-text" id="basic-addon1">
+                      <i className="fa fa-envelope" aria-hidden="true"></i>
                     </span>
                     <input
                       type="text"
@@ -65,7 +68,7 @@ function Login() {
                           message: "email is not valid",
                         },
                       })}
-                      class="form-control"
+                      className="form-control"
                       placeholder="Email"
                       aria-label="email"
                       aria-describedby="basic-addon1"
@@ -76,12 +79,12 @@ function Login() {
                       {errors.email.message}
                     </div>
                   )}
-                  <div class="input-group mb-3">
-                    <span class="input-group-text" id="basic-addon1">
-                      <i class="fa fa-key" aria-hidden="true"></i>
+                  <div className="input-group mb-3">
+                    <span className="input-group-text" id="basic-addon1">
+                      <i className="fa fa-key" aria-hidden="true"></i>
                     </span>
                     <input
-                      type="password"
+                      type={showPassword ? "text" : "password"}
                       {...register("password", {
                         required: "password is required",
                         pattern: {
@@ -90,11 +93,22 @@ function Login() {
                           message: "password is not valid",
                         },
                       })}
-                      class="form-control"
+                      className="form-control"
                       placeholder="Password"
                       aria-label="password"
                       aria-describedby="basic-addon1"
                     />
+                    <span
+                      className="input-group-text"
+                      id="basic-addon1"
+                      style={{ cursor: "pointer" }}
+                      onClick={() => setShowPassword(!showPassword)}
+                    >
+                      <i
+                        className={`fa ${showPassword ? "fa-eye-slash" : "fa-eye"}`}
+                        aria-hidden="true"
+                      ></i>{" "}
+                    </span>
                   </div>
                   {errors.password && (
                     <div className="alert alert-danger p-2">

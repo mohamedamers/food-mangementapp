@@ -1,9 +1,8 @@
-import React from "react";
-import logo from "../../../assets/images/logo.png";
-import {useNavigate } from "react-router-dom";
-import { useForm } from "react-hook-form";
 import axios from "axios";
+import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import logo from "../../../assets/images/logo.png";
 export default function ForgetPass() {
   let {
     register,
