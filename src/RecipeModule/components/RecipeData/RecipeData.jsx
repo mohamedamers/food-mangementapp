@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+// import "react-toastify/dist/ReactToastify.css";
 
 export default function RecipeData() {
   const [categoriesList, setCategoriesList] = useState([]);
@@ -125,6 +125,7 @@ export default function RecipeData() {
     getAllCategories();
     getAllTags();
     if (isUpdateMode) getRecipeById();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   return (
