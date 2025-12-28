@@ -16,6 +16,7 @@ import AuthLayout from "./shared/components/AuthLayout/AuthLayout";
 import MasterLayout from "./shared/components/MasterLayout/MasterLayout";
 import NotFound from "./shared/components/NotFound/NotFound";
 import ProtectedRoute from "./shared/components/ProtectedRoute/ProtectedRoute";
+import FavList from "./AuthModule/components/Favorites/components/FavList/FavList";
 
 function App() {
   const routes = createBrowserRouter([
@@ -48,6 +49,7 @@ function App() {
         { path: "categories", element: <CategoriesList /> },
         { path: "category-data", element: <CategoryData /> },
         { path: "users", element: <UsersList /> },
+        {path: "favs", element: <FavList />}
       ],
     },
   ]);

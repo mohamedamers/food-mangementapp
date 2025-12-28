@@ -7,6 +7,7 @@ import headerImg from "../../../assets/images/header2.png";
 import DeleteConfirmation from "../../../shared/components/DeleteConfirmation/DeleteConfirmation";
 import Header from "../../../shared/components/Header/Header";
 import NoData from "../../../shared/components/NoData/NoData";
+import { toast } from "react-toastify";
 
 export default function CategoriesList() {
   const [categoriesList, setCategoriesList] = useState([]);
@@ -22,7 +23,9 @@ export default function CategoriesList() {
   // States للمودالات
   const [showDelete, setShowDelete] = useState(false);
   const [showAdd, setShowAdd] = useState(false);
+  const [showEdit, setShowEdit] = useState(false);
   const [newCategoryName, setNewCategoryName] = useState("");
+  const [editCategoryName, setEditCategoryName] = useState("");
 
   // Functions التحكم في المودالات
   const handleCloseDelete = () => setShowDelete(false);
@@ -37,6 +40,19 @@ export default function CategoriesList() {
     setNewCategoryName("");
   };
   const handleShowAdd = () => setShowAdd(true);
+
+  const handleCloseEdit = () => {
+    setShowEdit(false);
+    setEditCategoryName("");
+  };
+
+  const handleShowEdit = (cat) => {
+    setCatId(cat.id);
+    setCatName(cat.name);
+    setEditCategoryName(cat.name);
+    setShowEdit(true);
+    setOpenId(null); // إغلاق dropdown عند فتح مودال edit
+  };
 
   // جلب البيانات
   const getAllCategories = async (pageNo) => {
@@ -64,10 +80,30 @@ export default function CategoriesList() {
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         }
       );
+      toast.success("Category added successfully");
       handleCloseAdd();
-      getAllCategories(pageNumber); // تحديث الجدول بعد الإضافة
+      getAllCategories(pageNumber);
     } catch (error) {
       console.error("Error adding category:", error);
+    }
+  };
+
+  // تعديل تصنيف
+  const editCategory = async () => {
+    try {
+      await axios.put(
+        `https://upskilling-egypt.com:3006/api/v1/Category/${catId}`,
+        { name: editCategoryName },
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        }
+      );
+      toast.success("Category edited successfully");
+
+      handleCloseEdit();
+      getAllCategories(pageNumber);
+    } catch (error) {
+      console.error("Error editing category:", error);
     }
   };
 
@@ -80,8 +116,9 @@ export default function CategoriesList() {
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         }
       );
+      toast.success("Category deleted successfully");
       handleCloseDelete();
-      getAllCategories(pageNumber); // تحديث الجدول بعد الحذف
+      getAllCategories(pageNumber);
     } catch (error) {
       console.error("Error deleting category:", error);
     }
@@ -150,6 +187,50 @@ export default function CategoriesList() {
           </Modal.Footer>
         </Modal>
 
+        {/* Modal التعديل (Edit Category) - زي الصورة */}
+        <Modal show={showEdit} onHide={handleCloseEdit} centered>
+          <Modal.Header closeButton className="border-0 pb-0">
+            <Modal.Title className="fw-bold">Edit Category</Modal.Title>
+          </Modal.Header>
+          <Modal.Body className="py-3">
+            <div className="mb-4">
+              {/* حقل التعديل */}
+              <div>
+                <label className="form-label fw-medium mb-2">
+                  New Category Name
+                </label>
+                <input
+                  type="text"
+                  className="form-control py-2 border"
+                  placeholder="Enter new category name"
+                  value={editCategoryName}
+                  onChange={(e) => setEditCategoryName(e.target.value)}
+                  autoFocus
+                />
+              </div>
+            </div>
+          </Modal.Body>
+          <Modal.Footer className="border-0 pt-0">
+            <div className="d-flex gap-3 w-100">
+              <Button
+                variant="light"
+                className="flex-fill border"
+                onClick={handleCloseEdit}
+              >
+                Cancel
+              </Button>
+              <Button
+                variant="success"
+                className="flex-fill"
+                onClick={editCategory}
+                disabled={!editCategoryName.trim()}
+              >
+                Save
+              </Button>
+            </div>
+          </Modal.Footer>
+        </Modal>
+
         {/* Modal الحذف (Delete Confirmation) */}
         <Modal show={showDelete} onHide={handleCloseDelete} centered>
           <Modal.Header closeButton></Modal.Header>
@@ -210,7 +291,10 @@ export default function CategoriesList() {
                             <i className="fa-regular fa-eye text-success me-2"></i>{" "}
                             View
                           </button>
-                          <button className="dropdown-item py-2">
+                          <button
+                            className="dropdown-item py-2"
+                            onClick={() => handleShowEdit(category)}
+                          >
                             <i className="fa-solid fa-pencil text-success me-2"></i>{" "}
                             Edit
                           </button>
@@ -240,7 +324,7 @@ export default function CategoriesList() {
         {/* الترقيم (Pagination) */}
         <div className="d-flex gap-2 mt-4 justify-content-center">
           <button
-            className="btn btn-outline-secondary"
+            className="btn btn-outline-success"
             disabled={pageNumber === 1}
             onClick={() => setPageNumber((p) => p - 1)}
           >
@@ -250,7 +334,7 @@ export default function CategoriesList() {
             Page <b>{pageNumber}</b> of <b>{totalNumberOfPages}</b>
           </span>
           <button
-            className="btn btn-outline-secondary"
+            className="btn btn-outline-success"
             disabled={pageNumber >= totalNumberOfPages}
             onClick={() => setPageNumber((p) => p + 1)}
           >

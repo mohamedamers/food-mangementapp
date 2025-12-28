@@ -5,8 +5,10 @@ import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import logo from "../../../assets/images/logo.png";
 import { AuthContext } from "../../../context/AuthContext";
+import { EmailValidation, PasswordValidation } from "../../../services/validations";
+import { baseURL, USERS_URLS } from "../../../services/api/apiURLs";
 function Login() {
-  let {saveLoginData} = useContext(AuthContext);
+  let { saveLoginData } = useContext(AuthContext);
   const [showPassword, setShowPassword] = useState(false);
   let {
     register,
@@ -17,8 +19,7 @@ function Login() {
 
   const onSubmit = async (data) => {
     try {
-      let response = await axios.post(
-        "https://upskilling-egypt.com:3006/api/v1/Users/Login",
+      let response = await axios.post(`${baseURL}${USERS_URLS.LOGIN}`,
         data
       );
       localStorage.setItem("token", response.data.token);
@@ -61,13 +62,7 @@ function Login() {
                     </span>
                     <input
                       type="text"
-                      {...register("email", {
-                        required: "email is required",
-                        pattern: {
-                          value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                          message: "email is not valid",
-                        },
-                      })}
+                      {...register("email", EmailValidation)}
                       className="form-control"
                       placeholder="Email"
                       aria-label="email"
@@ -85,14 +80,7 @@ function Login() {
                     </span>
                     <input
                       type={showPassword ? "text" : "password"}
-                      {...register("password", {
-                        required: "password is required",
-                        pattern: {
-                          value:
-                            /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
-                          message: "password is not valid",
-                        },
-                      })}
+                      {...register("password", PasswordValidation)}
                       className="form-control"
                       placeholder="Password"
                       aria-label="password"
@@ -105,7 +93,9 @@ function Login() {
                       onClick={() => setShowPassword(!showPassword)}
                     >
                       <i
-                        className={`fa ${showPassword ? "fa-eye-slash" : "fa-eye"}`}
+                        className={`fa ${
+                          showPassword ? "fa-eye-slash" : "fa-eye"
+                        }`}
                         aria-hidden="true"
                       ></i>{" "}
                     </span>

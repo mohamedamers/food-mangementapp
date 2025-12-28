@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import logo from "../../../assets/images/logo.png";
+import { baseURL, USERS_URLS } from "../../../services/api/apiURLs";
 export default function ForgetPass() {
   let {
     register,
@@ -14,7 +15,7 @@ export default function ForgetPass() {
   const onSubmit = async (data) => {
     try {
       let response = await axios.post(
-        "https://upskilling-egypt.com:3006/api/v1/Users/Reset/Request",
+        `${baseURL}${USERS_URLS.FORGET}`,
         data
       );
       console.log(response);

@@ -4,6 +4,8 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import logo from "../../../assets/images/logo.png";
+import { EmailValidation, PasswordValidation } from "../../../services/validations";
+import { baseURL, USERS_URLS } from "../../../services/api/apiURLs";
 
 export default function ForgetPass() {
   const [showPass, setShowPass] = useState(false);
@@ -22,7 +24,7 @@ export default function ForgetPass() {
   const onSubmit = async (data) => {
     try {
       let response = await axios.post(
-        "https://upskilling-egypt.com:3006/api/v1/Users/Reset/Request",
+        `${baseURL}${USERS_URLS.RESET}`,
         data
       );
       console.log(response);
@@ -63,13 +65,7 @@ export default function ForgetPass() {
                     </span>
                     <input
                       type="text"
-                      {...register("email", {
-                        required: "email is required",
-                        pattern: {
-                          value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                          message: "email is not valid",
-                        },
-                      })}
+                      {...register("email", EmailValidation)}
                       class="form-control"
                       placeholder="Email"
                       aria-label="email"
@@ -111,14 +107,7 @@ export default function ForgetPass() {
                     </span>
                     <input
                       type={showPass ? "text" : "password"}
-                      {...register("password", {
-                        required: "password is required",
-                        pattern: {
-                          value:
-                            /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
-                          message: "password is not valid",
-                        },
-                      })}
+                      {...register("password", PasswordValidation )}
                       class="form-control"
                       placeholder=" New Password"
                       aria-label="password"
@@ -140,14 +129,7 @@ export default function ForgetPass() {
                     </span>
                     <input
                       type={showConfirmPass ? "text" : "password"}
-                      {...register("password", {
-                        required: "password is required",
-                        pattern: {
-                          value:
-                            /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
-                          message: "password is not valid",
-                        },
-                      })}
+                      {...register("password", PasswordValidation )}
                       class="form-control"
                       placeholder="Confirm New Password"
                       aria-label="password"
